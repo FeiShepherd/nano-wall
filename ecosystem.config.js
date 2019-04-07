@@ -4,7 +4,7 @@ module.exports = {
     script: 'index.js',
     instances: 1,
     autorestart: true,
-    watch: false,
+    watch: true,
     env: {
       NODE_ENV: 'development',
       PORT: 3000
