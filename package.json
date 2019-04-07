@@ -1,7 +1,7 @@
 {
-  "name": "nano-wall",
+  "name": "sinon-mocha-nodejs-starter",
   "version": "1.0.0",
-  "description": "paint with nano",
+  "description": "Starter with mocha nodejs sinon",
   "main": "index.js",
   "scripts": {
     "start": "pm2 start ecosystem.config.js --no-daemon",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FeiShepherd/nano-wall.git"
+    "url": "git+https://github.com/FeiShepherd/sinon-mocha-nodejs-starter.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FeiShepherd/nano-wall/issues"
+    "url": "https://github.com/FeiShepherd/sinon-mocha-nodejs-starter/issues"
   },
-  "homepage": "https://github.com/FeiShepherd/nano-wall#readme",
+  "homepage": "https://github.com/FeiShepherd/sinon-mocha-nodejs-starter#readme",
   "devDependencies": {
     "mocha": "^6.0.2",
     "proxyquire": "^2.1.0",
