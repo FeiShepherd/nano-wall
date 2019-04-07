@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "pm2 start ecosystem.config.js --no-daemon",
-    "test": "mocha 'src/**/*.js' --recursive"
+    "test": "mocha 'src/**/*.test.js' --recursive"
   },
   "repository": {
     "type": "git",
