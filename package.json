@@ -1,0 +1,28 @@
+{
+  "name": "nano-wall",
+  "version": "1.0.0",
+  "description": "paint with nano",
+  "main": "index.js",
+  "scripts": {
+    "start": "pm2 start ecosystem.config.js --no-daemon",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FeiShepherd/nano-wall.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FeiShepherd/nano-wall/issues"
+  },
+  "homepage": "https://github.com/FeiShepherd/nano-wall#readme",
+  "devDependencies": {
+    "mocha": "^6.0.2",
+    "proxyquire": "^2.1.0",
+    "sinon": "^7.3.1"
+  },
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
