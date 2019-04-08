@@ -4,7 +4,12 @@ const middlewares = [
   {
     method: "get",
     chain: ["/", hello]
+  },
+  {
+    method: "post",
+    chain: ["/pixel"]
   }
 ]
+
 
 module.exports = middlewares
