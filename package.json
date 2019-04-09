@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "pm2 start ecosystem.config.js --no-daemon",
-    "test": "mocha 'src/**/*.test.js' --recursive"
+    "test": "mocha './src/**/*.test.js' --recursive"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
     "sinon": "^7.3.1"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "raiblocks-client": "^1.0.0"
   }
 }
