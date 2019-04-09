@@ -10,13 +10,13 @@ pm2
   
 # Setup  
   
-chmod +x ./docker-start.sh
-./docker-start.sh
+chmod +x ./docker-start.sh  
+./docker-start.sh  
 npm install  
   
 # Adding a wallet to node
   
-[Create wallet](https://github.com/nanocurrency/nano-node/wiki/Docker-node#setting-up-a-wallet-and-adding-accounts)
+[Create wallet](https://github.com/nanocurrency/nano-node/wiki/Docker-node#setting-up-a-wallet-and-adding-accounts)  
   
 # Start  
 npm start  
