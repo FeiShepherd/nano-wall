@@ -15,7 +15,7 @@ const generate = async () => {
       wallet,
       count: 250000
     })
-    console.log(addresses)
+    return addresses
   } catch (err) {
     throw err
   }

@@ -29,8 +29,8 @@ describe("generator", () => {
       await generate()
       assert(
         raiClient.accounts_create.calledWith({
-          wallet: sinon.match.any,
-          count: 250000
+          wallet: sinon.match.string,
+          count: sinon.match.number
         })
       )
     })
