@@ -12,7 +12,7 @@ describe('Server', () => {
     }
     routes = sinon.stub
     express = sinon.stub().returns(expressObj)
-    api = proxyquire('./server.js', {
+    api = proxyquire('../src/server.js', {
       express: express,
       './routes/index.js': routes
     })

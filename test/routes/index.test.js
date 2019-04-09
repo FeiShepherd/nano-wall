@@ -1,6 +1,5 @@
 const assert = require("assert")
 const sinon = require("sinon")
-const router = require("./index.js")
 const proxyquire = require("proxyquire")
 
 describe("Routes", () => {
@@ -24,7 +23,7 @@ describe("Routes", () => {
         chain: ["/test3", () => {}]
       }
     ]
-    router = proxyquire("./index.js", {
+    router = proxyquire("../../src/routes/index.js", {
       "./routes.js": middlewares
     })
   })

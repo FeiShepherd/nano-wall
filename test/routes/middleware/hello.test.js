@@ -15,7 +15,7 @@ describe("Middleware Hello", () => {
     middleware = {
       hello: sinon.stub()
     }
-    middleware = require("./hello.js")
+    middleware = require("../../../src/routes/middleware/hello.js")
   })
   describe("#hello()", () => {
     it('should have correct format', () => {

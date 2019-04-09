@@ -16,7 +16,7 @@ describe("generator", () => {
       accounts_create: sinon.stub().resolves(response)
     }
     client = sinon.stub().returns(raiClient)
-    generate = proxyquire("./index.js", {
+    generate = proxyquire("../src/generate.js", {
       "raiblocks-client": { client }
     })
   })
