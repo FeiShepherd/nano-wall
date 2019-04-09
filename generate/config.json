@@ -1,6 +1,6 @@
 {
-  "wallet": "000D1BAEC8EC208142C99059B393051BAC8380F9B5A2E6B2489A277D81789F3F",
+  "wallet": "C8889238946599467C6D3A2514A2EE4A2A478B0E06CC72FD6319EAB1B0EFE2F2",
   "rai_node_host": "http://[::1]:7076",
-  "iterations": 250,
-  "count": 1000
+  "iterations": 25,
+  "count": 10000
 }

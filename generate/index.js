@@ -9,9 +9,12 @@ const generate = async () => {
     rai_node_host,
   })
   try {
+    log('Unlocking wallet')
     unlock = await raiClient.password_enter({
       wallet,
+      password: ""
     })
+    log('Wallet unlocked')
     if (unlock.valid === '1') {
       let addresses = []
       for (let i = 0; i < iterations; i++) {
@@ -21,12 +24,9 @@ const generate = async () => {
             count,
           }),
         )
-        if (process.argv[2] === '-v') console.log(` ${i / 250}% done `)
+        log(` ${i / 250}% done `)
       }
       await writeFile('addresses', JSON.stringify({addresses}))
-      await raiClient.wallet_lock({
-        wallet,
-      })
       return 1
     } else {
       throw new Error('could not unlock wallet')
@@ -35,5 +35,10 @@ const generate = async () => {
     throw err
   }
 }
+
+const log = string => {
+  if (process.argv[2] === '-v') console.log(string)
+}
+
 generate()
 module.exports = generate
