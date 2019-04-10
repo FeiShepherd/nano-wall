@@ -3,6 +3,7 @@ const fs = require('fs')
 const util = require('util')
 const writeFile = util.promisify(fs.writeFile)
 const {rai_node_host, wallet, iterations, count} = require('./config.json')
+const {sortAddresses} = require('./util.js')
 
 const generate = async () => {
   let raiClient = client({
@@ -12,21 +13,25 @@ const generate = async () => {
     log('Unlocking wallet')
     unlock = await raiClient.password_enter({
       wallet,
-      password: ""
+      password: '',
     })
     log('Wallet unlocked')
     if (unlock.valid === '1') {
       let addresses = []
       for (let i = 0; i < iterations; i++) {
-        addresses.push(
-          await raiClient.accounts_create({
-            wallet,
-            count,
-          }),
-        )
-        log(` ${i / 250}% done `)
+        let created = await raiClient.accounts_create({
+          wallet,
+          count,
+        })
+        addresses = addresses.concat(created.accounts)
+        log(` ${i / iterations}% done `)
       }
+      addresses = sortAddresses(addresses)
+
       await writeFile('addresses', JSON.stringify({addresses}))
+      await raiClient.wallet_lock({
+        wallet,
+      })
       return 1
     } else {
       throw new Error('could not unlock wallet')

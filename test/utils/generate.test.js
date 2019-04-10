@@ -3,7 +3,15 @@ const sinon = require('sinon')
 const proxyquire = require('proxyquire')
 
 describe('generator', () => {
-  let generate, raiClient, host, client, response, fs
+  let generate, raiClient, host, client, response, fs, util
+
+  const {
+    wallet,
+    rai_node_host,
+    iterations,
+    count,
+  } = require('../../src/utils/config.json')
+
   beforeEach(() => {
     responses = {
       accounts: {
@@ -24,17 +32,20 @@ describe('generator', () => {
     }
     raiClient = {
       wallet_lock: sinon.stub().resolves(responses.locked),
-      accounts_create: sinon.stub().resolves(responses.account),
+      accounts_create: sinon.stub().resolves(responses.accounts),
       password_enter: sinon.stub().resolves(responses.unlock_success),
     }
     fs = {
       writeFile: sinon.stub().yields(null, 1),
     }
-    rai_node_host = 'http://[::1]:7076'
+    util = {
+      sortAddresses: sinon.stub().returnsArg(0),
+    }
     client = sinon.stub().returns(raiClient)
-    generate = proxyquire('../generate/index.js', {
+    generate = proxyquire('../../src/utils/generate.js', {
       'raiblocks-client': {client},
       fs: fs,
+      './util.js': util
     })
   })
   describe('#generate()', () => {
@@ -44,7 +55,12 @@ describe('generator', () => {
     })
     it('should unlock wallet', async () => {
       await generate()
-      assert(raiClient.password_enter.called)
+      assert(
+        raiClient.password_enter.calledWith({
+          wallet,
+          password: '',
+        }),
+      )
     })
     it('should throw if not valid', async () => {
       let error
@@ -60,15 +76,19 @@ describe('generator', () => {
       await generate()
       assert(
         raiClient.accounts_create.calledWith({
-          wallet: sinon.match.string,
-          count: 1000,
+          wallet,
+          count,
         }),
       )
     })
     it('should call create account 250 times', async () => {
       raiClient.accounts_create.callCount = 0
       await generate()
-      assert.equal(raiClient.accounts_create.callCount, 250)
+      assert.equal(raiClient.accounts_create.callCount, iterations)
+    })
+    it('should sort addresses', async () => {
+      await generate()
+      assert(util.sortAddresses.called)
     })
     it('should store addresses into json file', async () => {
       await generate()
