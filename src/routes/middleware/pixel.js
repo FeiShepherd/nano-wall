@@ -1,9 +1,11 @@
 'use strict'
 
-const create = (req, res, next) => {
-  res.send('hello')
+//const cacheHandler = require('../utils/pixelHandler.js')
+
+const getPixel = (req, res, next) => {
+  res.status(200).json('pixel')
 }
 
 module.exports = {
-  create
+  getPixel,
 }
