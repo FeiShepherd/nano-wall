@@ -109,10 +109,6 @@ describe('generator', () => {
       }
       assert.equal(error.message, 'random fail')
     })
-    it('should call lock wallet', async () => {
-      await generate()
-      assert(raiClient.wallet_lock.called)
-    })
     it('should return 1', async () => {
       let returned = await generate()
       assert.equal(returned, 1)

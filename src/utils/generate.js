@@ -26,14 +26,10 @@ const generate = async () => {
         addresses = addresses.concat(created.accounts)
         log(` ${i / iterations}% done `)
       }
-
       addresses = sortAddresses(addresses)
-      addresses = convertToObject(convertToObject)
+      addresses = convertToObject(addresses)
 
-      await writeFile('addresses', JSON.stringify({addresses}))
-      await raiClient.wallet_lock({
-        wallet,
-      })
+      await writeFile('addresses.json', JSON.stringify({addresses}))
       return 1
     } else {
       throw new Error('could not unlock wallet')
