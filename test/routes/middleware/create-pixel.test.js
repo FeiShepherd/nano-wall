@@ -9,7 +9,7 @@ describe('Middleware pixel', () => {
   beforeEach(() => {
     res = {
       json: sinon.stub(),
-      status: sinon.stub()
+      status: sinon.stub(),
     }
     res.status.returns(res)
     next = sinon.stub()
@@ -32,12 +32,7 @@ describe('Middleware pixel', () => {
       middleware.getPixel(req, res, next)
       assert(res.json.calledWith('pixel'))
     })
-    /*
-      it('should call cache', () => {
-        middleware.getPixel(req, res, next)
-      })
-      it('should change if updated by new block', () => {
-        middleware.getPixel(req, res, next)
-      })*/
+    it('should call cache')
+    it('should change if updated by new block')
   })
 })

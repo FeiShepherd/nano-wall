@@ -14,13 +14,7 @@ const convertToObject = array => {
   return object
 }
 
-const addressExist = (object, target) => {
-  //TODO: come up with an even faster search
-  return target in object
-}
-
 module.exports = {
   sortAddresses,
-  addressExist,
   convertToObject,
 }

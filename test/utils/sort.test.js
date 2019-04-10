@@ -19,19 +19,4 @@ describe('util', () => {
       })
     })
   })
-  describe('#addressExist()', () => {
-    it('should return true if exists', () => {
-      const sampleData = {
-        z1: 1,
-        z2: 1,
-      }
-      const addressExist = util.addressExist(sampleData, 'z1')
-      assert.equal(addressExist, true)
-    })
-    it('should return false if doesnt', () => {
-      const sampleData = ['z1', 'z2', 'z3']
-      const addressExist = util.addressExist(sampleData, 'z4')
-      assert.equal(addressExist, false)
-    })
-  })
 })
