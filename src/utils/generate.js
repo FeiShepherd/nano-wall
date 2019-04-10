@@ -3,7 +3,7 @@ const fs = require('fs')
 const util = require('util')
 const writeFile = util.promisify(fs.writeFile)
 const {rai_node_host, wallet, iterations, count} = require('./config.json')
-const {sortAddresses} = require('./util.js')
+const {sortAddresses, convertToObject} = require('./util.js')
 
 const generate = async () => {
   let raiClient = client({
@@ -26,7 +26,9 @@ const generate = async () => {
         addresses = addresses.concat(created.accounts)
         log(` ${i / iterations}% done `)
       }
+
       addresses = sortAddresses(addresses)
+      addresses = convertToObject(convertToObject)
 
       await writeFile('addresses', JSON.stringify({addresses}))
       await raiClient.wallet_lock({

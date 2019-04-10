@@ -40,12 +40,13 @@ describe('generator', () => {
     }
     util = {
       sortAddresses: sinon.stub().returnsArg(0),
+      convertToObject: sinon.stub().returnsArg(0),
     }
     client = sinon.stub().returns(raiClient)
     generate = proxyquire('../../src/utils/generate.js', {
       'raiblocks-client': {client},
       fs: fs,
-      './util.js': util
+      './util.js': util,
     })
   })
   describe('#generate()', () => {
@@ -81,14 +82,18 @@ describe('generator', () => {
         }),
       )
     })
-    it('should call create account 250 times', async () => {
+    it('should call create account x times', async () => {
       raiClient.accounts_create.callCount = 0
       await generate()
       assert.equal(raiClient.accounts_create.callCount, iterations)
     })
-    it('should sort addresses', async () => {
+    it('should call sort addresses', async () => {
       await generate()
       assert(util.sortAddresses.called)
+    })
+    it('should call convertToObject', async () => {
+      await generate()
+      assert(util.convertToObject.called)
     })
     it('should store addresses into json file', async () => {
       await generate()
