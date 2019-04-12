@@ -1,5 +1,5 @@
 # Nano Wall
-This project is the backend for Nano Wall  
+This project is the backend for Nano Wall. Generates addresses from nano node which it then brute force checks every block that comes from the network. After finding a match to the set or addresses it then validates and updates.
     
 ## Dependencies  
 Docker  
