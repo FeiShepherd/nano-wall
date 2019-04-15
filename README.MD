@@ -1,6 +1,8 @@
 # Nano Wall
-This project is the backend for Nano Wall. Generates addresses from nano node which it then brute force checks every block that comes from the network. After finding a match to the set or addresses it then validates and updates.
-    
+This project is the backend for Nano Wall.  
+Generates x amount of nano addresses and stores them in a json file.  
+Then brute force checks each block that comes in to see if any of the generated addresses is a receiver.  
+If receiver validate hash and update 2d array to receiver  
 ## Dependencies  
 Docker  
 Docker compose  
