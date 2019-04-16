@@ -1,23 +1,14 @@
 "use strict"
 
 const router = require("express").Router()
-const middlewares = require("./routes.js")
+const { getPixel } = require("./middleware/pixel.js")
+const {
+  validateBlock,
+  checkPixels,
+  updatePixels
+} = require("./middleware/block.js")
 
-middlewares.forEach(route => {
-  switch (route.method) {
-    case "get":
-      router.get(...route.chain)
-      break
-    case "post":
-      router.post(...route.chain)
-      break
-    case "delete":
-      router.delete(...route.chain)
-      break
-    case "patch":
-      router.patch(...route.chain)
-      break
-  }
-})
+router.get("/pixel", getPixel)
+router.post("/block", checkPixels, validateBlock, updatePixels)
 
 module.exports = router

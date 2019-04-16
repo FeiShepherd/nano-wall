@@ -1,48 +1,33 @@
 const assert = require("assert")
 const sinon = require("sinon")
-const proxyquire = require("proxyquire")
 
 describe("Routes", () => {
-  let router, middlewares
+  let router, middlewareMap
   beforeEach(() => {
-    middlewares = [
+    middlewareMap = [
       {
-        method: "get",
-        chain: ["/", () => {}]
+        path: "/pixel",
+        type: "get",
+        methods: ["getPixel"]
       },
       {
-        method: "post",
-        chain: ["/test", () => {}, () => {}]
-      },
-      {
-        method: "delete",
-        chain: ["/test2", () => {}]
-      },
-      {
-        method: "patch",
-        chain: ["/test3", () => {}]
+        path: "/block",
+        type: "post",
+        methods: ["checkPixels", "validateBlock", "updatePixels"]
       }
     ]
-    router = proxyquire("../../src/routes/index.js", {
-      "./routes.js": middlewares
-    })
+    router = require("../../src/routes/index.js")
   })
   it("should set up", () => {
     assert.equal(typeof router.stack, "object")
   })
-  it("should map 4 methods to stack", () => {
-    assert.equal(router.stack.length, 4)
-  })
-  it("should map methods correctly", () => {
-    assert.equal(router.stack[0].route.methods.get, true)
-    assert.equal(router.stack[1].route.methods.post, true)
-    assert.equal(router.stack[2].route.methods.delete, true)
-    assert.equal(router.stack[3].route.methods.patch, true)
-  })
-  it("should map path", () => {
-    assert.equal(router.stack[1].route.path, '/test')
-  })
-  it("should map middleware functions", () => {
-    assert.equal(router.stack[1].route.stack.length, 2)
+  it("should add correct routes to block", () => {
+    middlewareMap.forEach((middleware, index) => {
+      const currentRoute = router.stack[index].route
+      assert.equal(currentRoute.path, middleware.path)
+      middleware.methods.forEach((method, methodIndex) => {
+        assert.equal(currentRoute.stack[methodIndex].handle.name, method)
+      })
+    })
   })
 })

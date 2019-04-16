@@ -9,15 +9,14 @@ describe("Middleware block", () => {
   beforeEach(() => {
     res = {
       json: sinon.stub(),
-      status: sinon.stub().returns(res)
+      status: sinon.stub()
     }
+    res.status.returns(res)
     next = sinon.stub()
     req = sinon.stub()
     middleware = {
       validateBlock: sinon.stub()
     }
-    middleware = require("../../../src/routes/middleware/block.js")
-
     sampleBlock = {
       account:
         "xrb_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est",
@@ -37,13 +36,22 @@ describe("Middleware block", () => {
       is_send: "true",
       subtype: "send"
     }
+
+    middleware = proxyrequire("../../../src/routes/middleware/block.js", {
+      "../../pixelHandler": pixelHandler
+    })
   })
   describe("#checkPixels()", () => {
     it("should have correct format", () => {
       assert(typeof middleware.validateBlock, "function")
       assert.equal(middleware.validateBlock.length, 3)
     })
-    it("should check if block is in pixels cache")
+    it("should check if block is in pixels cache", () => {
+      req.body = {
+        sampleBlock
+      }
+      middleware.validateBlock(req, res, next)
+    })
   })
   describe("#validateBlock()", () => {
     it("should have correct format", () => {
