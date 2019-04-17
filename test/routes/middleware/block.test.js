@@ -5,7 +5,16 @@ const sinon = require("sinon")
 const proxyquire = require("proxyquire")
 
 describe("Middleware block", () => {
-  let middleware, res, req, next, sampleBlock, pixelHandler, client
+  let middleware,
+    res,
+    req,
+    next,
+    sampleBlock,
+    pixelHandler,
+    client,
+    raiClient,
+    responses
+
   beforeEach(() => {
     res = {
       json: sinon.stub(),
@@ -17,10 +26,22 @@ describe("Middleware block", () => {
     middleware = {
       validateBlock: sinon.stub()
     }
-    sampleBlock = require('./sample-block.js')
+    sampleBlock = require("./sample-block.js")
     pixelHandler = {
       addressExist: sinon.stub()
     }
+    responses = {
+      created: {
+        started: "1"
+      },
+      failed: {
+        started: "0"
+      }
+    }
+    raiClient = {
+      block_confirm: sinon.stub().resolves(responses.created)
+    }
+    client = sinon.stub().returns(raiClient)
     middleware = proxyquire("../../../src/routes/middleware/block.js", {
       "../../utils/pixelHandler": pixelHandler,
       "raiblocks-client": { client }
@@ -38,8 +59,12 @@ describe("Middleware block", () => {
       }
       middleware.setAddress(req, res, next)
       assert.equal(
-        req.senderAddress,
+        req.block.senderAddress,
         "xrb_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z"
+      )
+      assert.equal(
+        req.block.hash,
+        "82D68AE43E3E04CBBF9ED150999A347C2ABBE74B38D6E506C18DF7B1994E06C2"
       )
     })
     it("should call next", () => {
@@ -58,7 +83,9 @@ describe("Middleware block", () => {
     it("should call next on find", () => {
       let errorMessage
       pixelHandler.addressExist.returns(true)
-      req.senderAddress = "blah"
+      req.block = {
+        senderAddress: "blah"
+      }
       middleware.checkPixels(req, res, next)
       assert(next.called)
     })
@@ -66,7 +93,9 @@ describe("Middleware block", () => {
     it("should throw because cannot find", () => {
       let errorMessage
       pixelHandler.addressExist.returns(false)
-      req.senderAddress = "blah"
+      req.block = {
+        senderAddress: "blah"
+      }
       try {
         middleware.checkPixels(req, res, next)
       } catch (err) {
@@ -80,9 +109,26 @@ describe("Middleware block", () => {
       assert(typeof middleware.validateBlock, "function")
       assert.equal(middleware.validateBlock.length, 3)
     })
-    it("should validate hash with network", () => {
-      req.senderAddress = "blah"
-      middleware.validateBlock(req, res, next)
+    it("should validate hash with network", async () => {
+      req.block = {
+        hash: "blah"
+      }
+      await middleware.validateBlock(req, res, next)
+      assert(raiClient.block_confirm.calledWith({ hash: "blah" }))
+      assert(next.called)
+    })
+    it("should throw if validate fail", async () => {
+      let error
+      req.block = {
+        hash: "blah"
+      }
+      raiClient.block_confirm.returns(responses.failed)
+      try {
+        await middleware.validateBlock(req, res, next)
+      } catch (err) {
+        error = err.message
+      }
+      assert.equal(error, "failed on block validate")
     })
   })
   describe("#updatePixel()", () => {
