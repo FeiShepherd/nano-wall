@@ -28,7 +28,8 @@ describe("Middleware block", () => {
     }
     sampleBlock = require("./sample-block.js")
     pixelHandler = {
-      addressExist: sinon.stub()
+      addressExist: sinon.stub(),
+      setPixel: sinon.stub()
     }
     responses = {
       created: {
@@ -66,6 +67,10 @@ describe("Middleware block", () => {
         req.block.hash,
         "82D68AE43E3E04CBBF9ED150999A347C2ABBE74B38D6E506C18DF7B1994E06C2"
       )
+      assert.equal(
+        req.block.receiverAddress,
+        "xrb_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est"
+      )
     })
     it("should call next", () => {
       req.body = {
@@ -84,17 +89,20 @@ describe("Middleware block", () => {
       let errorMessage
       pixelHandler.addressExist.returns(true)
       req.block = {
-        senderAddress: "blah"
+        senderAddress: "blah",
+        receiverAddress: "meh"
       }
       middleware.checkPixels(req, res, next)
       assert(next.called)
+      assert(pixelHandler.addressExist.calledWith(req.block.receiverAddress))
     })
 
     it("should throw because cannot find", () => {
       let errorMessage
       pixelHandler.addressExist.returns(false)
       req.block = {
-        senderAddress: "blah"
+        senderAddress: "blah",
+        receiverAddress: "meh"
       }
       try {
         middleware.checkPixels(req, res, next)
@@ -136,6 +144,18 @@ describe("Middleware block", () => {
       assert(typeof middleware.validateBlock, "function")
       assert.equal(middleware.validateBlock.length, 3)
     })
-    it("should update pixel cache")
+    it("should update pixel cache", () => {
+      req.block = {
+        receiverAddress: "receive",
+        senderAddress: "sender"
+      }
+      middleware.updatePixels(req, res, next)
+      assert(
+        pixelHandler.setPixel.calledWith(
+          req.block.receiverAddress,
+          req.block.senderAddress
+        )
+      )
+    })
   })
 })

@@ -1,6 +1,6 @@
 "use strict"
 
-const { addressExist } = require("../../utils/pixelHandler.js")
+const { addressExist, setPixel } = require("../../utils/pixelHandler.js")
 let { client } = require("raiblocks-client")
 
 const setAddress = (req, res, next) => {
@@ -10,7 +10,8 @@ const setAddress = (req, res, next) => {
       const block = req.body.block
       req.block = {
         senderAddress: JSON.parse(block.block)["link_as_account"],
-        hash: block["hash"]
+        hash: block["hash"],
+        receiverAddress: block["account"]
       }
       return next()
     }
@@ -20,7 +21,7 @@ const setAddress = (req, res, next) => {
 
 const checkPixels = (req, res, next) => {
   if (typeof req.block.senderAddress === "string") {
-    if (addressExist(req.block.senderAddress)) {
+    if (addressExist(req.block.receiverAddress)) {
       return next()
     }
   }
@@ -43,6 +44,7 @@ const validateBlock = async (req, res, next) => {
 }
 
 const updatePixels = (req, res, next) => {
+  setPixel(req.block.receiverAddress, req.block.senderAddress)
   next()
 }
 
