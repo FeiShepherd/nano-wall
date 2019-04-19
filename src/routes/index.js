@@ -10,6 +10,6 @@ const {
 } = require("./middleware/block.js")
 
 router.get("/pixel", getPixel)
-router.post("/block", setAddress, checkPixels, validateBlock, updatePixels)
+router.post("/block", checkPixels, setAddress, validateBlock, updatePixels)
 
 module.exports = router

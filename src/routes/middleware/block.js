@@ -1,7 +1,17 @@
-"use strict"
+'use strict'
 
-const { addressExist, setPixel } = require("../../utils/pixelHandler.js")
-let { client } = require("raiblocks-client")
+//const { addressExist, setPixel }
+
+const pixelHandler = require('../../utils/pixelHandler.js')
+let {client} = require('raiblocks-client')
+
+const checkPixels = (req, res, next) => {
+  if (pixelHandler.addressExist(JSON.parse(req.body.block.block)['link_as_account'])) {
+    log(`Found block ${req.body.block}`)
+    return next()
+  }
+  throw new Error('cannot find address')
+}
 
 const setAddress = (req, res, next) => {
   log(`set address ${req.body.block}`)
@@ -10,50 +20,40 @@ const setAddress = (req, res, next) => {
     if (req.body.block.block) {
       const block = req.body.block
       req.block = {
-        senderAddress: JSON.parse(block.block)["link_as_account"],
-        hash: block["hash"],
-        receiverAddress: block["account"]
+        nanoWallAddress: JSON.parse(block.block)['link_as_account'],
+        hash: block['hash'],
+        senderAddress: block['account'],
       }
       return next()
     }
   }
-  throw new Error("block not set")
-}
-
-const checkPixels = (req, res, next) => {
-  log(`check pixels ${req.block}`)
-  if (typeof req.block.receiverAddress === "string") {
-    if (addressExist(req.block.receiverAddress)) {
-      return next()
-    }
-  }
-  throw new Error("cannot find address")
+  throw new Error('block not set')
 }
 
 const validateBlock = async (req, res, next) => {
   log(`validate block ${req.block}`)
-  const { hash } = req.block
+  const {hash} = req.block
   let raiClient = client({
-    rai_node_host: process.env.RAI_NODE_HOST
+    rai_node_host: process.env.RAI_NODE_HOST,
   })
 
   const confirm = await raiClient.block_confirm({
-    hash
+    hash,
   })
-  if (confirm.started === "1") {
+  if (confirm.started === '1') {
     return next()
   }
-  throw new Error("failed on block validate")
+  throw new Error('failed on block validate')
 }
 
 const updatePixels = (req, res, next) => {
   log(`update pixel ${req.block}`)
-  setPixel(req.block.receiverAddress, req.block.senderAddress)
+  pixelHandler.setPixel(req.block.nanoWallAddress, req.block.senderAddress)
   res.send('done')
 }
 
 const log = str => {
-  if(process.env.NODE_ENV === 'development'){
+  if (process.env.NODE_ENV === 'development') {
     console.log(str)
   }
 }
@@ -62,5 +62,5 @@ module.exports = {
   setAddress,
   validateBlock,
   checkPixels,
-  updatePixels
+  updatePixels,
 }
