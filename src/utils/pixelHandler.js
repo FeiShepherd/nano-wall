@@ -6,10 +6,10 @@ const readFile = promisify(fs.readFile)
 
 let pixels = {}
 
-const initFromFile = async file => {
+const initFromFile = async (file = './addresses.json') => {
   try {
     const contents = await readFile(file, 'utf8')
-    pixels = contents
+    pixels = JSON.parse(contents)
     return 1
   } catch (err) {
     throw err

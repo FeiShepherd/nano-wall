@@ -47,8 +47,12 @@ describe('Utils pixelHandler', () => {
       }
       assert.equal(error.message, 'lel')
     })
+    it('should default to addresses.json', async () => {
+      await pixelHandler.initFromFile()
+      assert(fs.readFile.calledWith('./addresses.json'))
+    })
     it('should retrieve data from pixels', async () => {
-      fs.readFile.yields(null, {'v10':'p1'})
+      fs.readFile.yields(null, '{"v10":"p1"}')
       await pixelHandler.initFromFile('./fakefile.json')
       const pixels = pixelHandler.getPixels()
       assert.equal(pixels['v10'], 'p1')

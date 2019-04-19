@@ -13,7 +13,7 @@ describe("Routes", () => {
       {
         path: "/block",
         type: "post",
-        methods: ["checkPixels", "validateBlock", "updatePixels"]
+        methods: ["setAddress", "checkPixels", "validateBlock", "updatePixels"]
       }
     ]
     router = require("../../src/routes/index.js")
