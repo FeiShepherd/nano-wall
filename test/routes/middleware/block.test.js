@@ -19,34 +19,34 @@ describe('Middleware block', () => {
     res = {
       json: sinon.stub(),
       status: sinon.stub(),
-      send: sinon.stub(),
+      send: sinon.stub()
     }
     res.status.returns(res)
     next = sinon.stub()
     req = sinon.stub()
     middleware = {
-      validateBlock: sinon.stub(),
+      validateBlock: sinon.stub()
     }
     sampleBlock = require('./sample-block.js')
     pixelHandler = {
       addressExist: sinon.stub(),
-      setPixel: sinon.stub(),
+      setPixel: sinon.stub()
     }
     responses = {
       created: {
-        started: '1',
+        started: '1'
       },
       failed: {
-        started: '0',
-      },
+        started: '0'
+      }
     }
     raiClient = {
-      block_confirm: sinon.stub().resolves(responses.created),
+      block_confirm: sinon.stub().resolves(responses.created)
     }
     client = sinon.stub().returns(raiClient)
     middleware = proxyquire('../../../src/routes/middleware/block.js', {
       '../../utils/pixelHandler': pixelHandler,
-      'raiblocks-client': {client},
+      'raiblocks-client': { client }
     })
   })
   describe('#checkPixels()', () => {
@@ -58,24 +58,19 @@ describe('Middleware block', () => {
       let errorMessage
       pixelHandler.addressExist.returns(true)
       req.body = {
-        block: sampleBlock,
+        block: sampleBlock
       }
       middleware.checkPixels(req, res, next)
       assert(next.called)
       assert(pixelHandler.addressExist.called)
     })
-    it('should throw because cannot find', () => {
-      let errorMessage
+    it('should return because cannot find', () => {
       pixelHandler.addressExist.returns(false)
       req.body = {
-        block: sampleBlock,
+        block: sampleBlock
       }
-      try {
-        middleware.checkPixels(req, res, next)
-      } catch (err) {
-        errorMessage = err.message
-      }
-      assert.equal(errorMessage, 'cannot find address')
+      middleware.checkPixels(req, res, next)
+      assert.equal(next.called, false)
     })
   })
   describe('#setAddress()', () => {
@@ -85,25 +80,25 @@ describe('Middleware block', () => {
     })
     it('should set address to req', () => {
       req.body = {
-        block: sampleBlock,
+        block: sampleBlock
       }
       middleware.setAddress(req, res, next)
       assert.equal(
         req.block.nanoWallAddress,
-        'xrb_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z',
+        'xrb_1qato4k7z3spc8gq1zyd8xeqfbzsoxwo36a45ozbrxcatut7up8ohyardu1z'
       )
       assert.equal(
         req.block.hash,
-        '82D68AE43E3E04CBBF9ED150999A347C2ABBE74B38D6E506C18DF7B1994E06C2',
+        '82D68AE43E3E04CBBF9ED150999A347C2ABBE74B38D6E506C18DF7B1994E06C2'
       )
       assert.equal(
         req.block.senderAddress,
-        'xrb_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est',
+        'xrb_1ipx847tk8o46pwxt5qjdbncjqcbwcc1rrmqnkztrfjy5k7z4imsrata9est'
       )
     })
     it('should call next', () => {
       req.body = {
-        block: sampleBlock,
+        block: sampleBlock
       }
       middleware.setAddress(req, res, next)
       assert(next.called)
@@ -116,16 +111,16 @@ describe('Middleware block', () => {
     })
     it('should validate hash with network', async () => {
       req.block = {
-        hash: 'blah',
+        hash: 'blah'
       }
       await middleware.validateBlock(req, res, next)
-      assert(raiClient.block_confirm.calledWith({hash: 'blah'}))
+      assert(raiClient.block_confirm.calledWith({ hash: 'blah' }))
       assert(next.called)
     })
     it('should throw if validate fail', async () => {
       let error
       req.block = {
-        hash: 'blah',
+        hash: 'blah'
       }
       raiClient.block_confirm.returns(responses.failed)
       try {
@@ -144,14 +139,14 @@ describe('Middleware block', () => {
     it('should update pixel cache', () => {
       req.block = {
         senderAddress: 'receive',
-        nanoWallAddress: 'sender',
+        nanoWallAddress: 'sender'
       }
       middleware.updatePixels(req, res, next)
       assert(
         pixelHandler.setPixel.calledWith(
           req.block.nanoWallAddress,
-          req.block.senderAddress,
-        ),
+          req.block.senderAddress
+        )
       )
     })
   })

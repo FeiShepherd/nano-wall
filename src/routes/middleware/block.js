@@ -11,7 +11,7 @@ const checkPixels = (req, res, next) => {
     log(`Found block ${req.body.block}`)
     return next()
   }
-  throw new Error('cannot find address')
+  return
 }
 
 const setAddress = (req, res, next) => {
