@@ -3,13 +3,13 @@
 const fs = require('fs')
 const {promisify} = require('util')
 const readFile = promisify(fs.readFile)
+const path = require('path')
 
 let pixels = {}
 
-const initFromFile = async (file = './addresses.json') => {
+const initFromFile = async (file = path.join(__dirname, './addresses.json')) => {
   try {
     const contents = await readFile(file, 'utf8')
-    console.log(contents)
     pixels = JSON.parse(contents)
     return 1
   } catch (err) {
@@ -33,5 +33,5 @@ module.exports = {
   initFromFile,
   addressExist,
   setPixel,
-  getPixels,
+  getPixels
 }
