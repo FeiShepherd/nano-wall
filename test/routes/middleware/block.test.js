@@ -30,7 +30,7 @@ describe('Middleware block', () => {
     sampleBlock = require('./sample-block.js')
     pixelHandler = {
       addressExist: sinon.stub(),
-      setPixel: sinon.stub()
+      set: sinon.stub()
     }
     responses = {
       created: {
@@ -45,7 +45,7 @@ describe('Middleware block', () => {
     }
     client = sinon.stub().returns(raiClient)
     middleware = proxyquire('../../../src/routes/middleware/block.js', {
-      '../../utils/pixelHandler': pixelHandler,
+      '../../utils/cache.js': pixelHandler,
       'raiblocks-client': { client }
     })
   })
@@ -143,7 +143,7 @@ describe('Middleware block', () => {
       }
       middleware.updatePixels(req, res, next)
       assert(
-        pixelHandler.setPixel.calledWith(
+        pixelHandler.set.calledWith(
           req.block.nanoWallAddress,
           req.block.senderAddress
         )

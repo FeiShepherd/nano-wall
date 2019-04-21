@@ -1,11 +1,11 @@
 'use strict'
 
-let pixelHandler = require('../../utils/pixelHandler.js')
+let pixelHandler = require('../../utils/cache.js')
 let {client} = require('raiblocks-client')
 
 const checkPixels = (req, res, next) => {
   log(`block incoming ${req.body}`)
-  log(`pixels ${JSON.stringify(pixelHandler.getPixels())}`)
+  log(`pixels ${JSON.stringify(pixelHandler.get())}`)
   if (pixelHandler.addressExist(JSON.parse(req.body.block.block)['link_as_account'])) {
     log(`Found block ${req.body.block}`)
     return next()
@@ -48,7 +48,7 @@ const validateBlock = async (req, res, next) => {
 
 const updatePixels = (req, res, next) => {
   log(`update pixel ${req.block}`)
-  pixelHandler.setPixel(req.block.nanoWallAddress, req.block.senderAddress)
+  pixelHandler.set(req.block.nanoWallAddress, req.block.senderAddress)
   res.send('done')
 }
 

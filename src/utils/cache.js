@@ -11,7 +11,7 @@ module.exports = (function() {
     get: () => {
       return pixels
     },
-    init: async () => {
+    init: async(cb) => {
       const contents = await readFile(
         path.join(__dirname, './addresses.json'),
         'utf8'
