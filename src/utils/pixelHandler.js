@@ -9,6 +9,7 @@ let pixels = {}
 const initFromFile = async (file = './addresses.json') => {
   try {
     const contents = await readFile(file, 'utf8')
+    console.log(contents)
     pixels = JSON.parse(contents)
     return 1
   } catch (err) {
