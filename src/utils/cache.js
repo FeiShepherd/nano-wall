@@ -11,18 +11,19 @@ module.exports = (function() {
     get: () => {
       return pixels
     },
-    init: async(cb) => {
+    init: async() => {
       const contents = await readFile(
         path.join(__dirname, './addresses.json'),
         'utf8'
       )
-      pixels = JSON.parse(contents)
+      pixels = JSON.parse(contents).addresses
       return pixels
     },
     set: (receiver, sender) => {
       pixels[receiver] = sender
     },
     addressExist: address => {
+    console.log(pixels)
       return address in pixels
     }
   }
