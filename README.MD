@@ -16,7 +16,7 @@ pm2
 chmod +x ./docker-start.sh  
 ./docker-start.sh  
 npm install  
-  
+add block_confirm into node_modules/rai_client  
 ## Adding a wallet to node
   
 [Create wallet](https://github.com/nanocurrency/nano-node/wiki/Docker-node#setting-up-a-wallet-and-adding-accounts)  

@@ -5,7 +5,8 @@ let {client} = require('raiblocks-client')
 
 const checkPixels = (req, res, next) => {
   log(`block incoming ${req.body}`)
-  log(`pixels ${JSON.stringify(pixelHandler.get())}`)
+  //log(`pixels ${JSON.stringify(pixelHandler.get())}`)
+  console.log(pixelHandler.addressExist(JSON.parse(req.body.block.block)['link_as_account']))
   if (pixelHandler.addressExist(JSON.parse(req.body.block.block)['link_as_account'])) {
     log(`Found block ${req.body.block}`)
     return next()
