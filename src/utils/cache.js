@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const util = require('util')
+const writeFile = util.promisify(fs.writeFile)
 const readFile = util.promisify(fs.readFile)
 const path = require('path')
 
@@ -11,7 +12,7 @@ module.exports = (function() {
     get: () => {
       return pixels
     },
-    init: async() => {
+    init: async () => {
       const contents = await readFile(
         path.join(__dirname, './addresses.json'),
         'utf8'
@@ -23,8 +24,15 @@ module.exports = (function() {
       pixels[receiver] = sender
     },
     addressExist: address => {
-    console.log(pixels)
       return address in pixels
+    },
+    backUp: async() => {
+      await writeFile(
+        path.join(__dirname, './addresses.json'),
+        JSON.stringify({
+          addresses: pixels
+        })
+      )
     }
   }
 })()

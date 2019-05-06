@@ -5,8 +5,6 @@ let {client} = require('raiblocks-client')
 
 const checkPixels = (req, res, next) => {
   log(`block incoming ${req.body}`)
-  //log(`pixels ${JSON.stringify(pixelHandler.get())}`)
-  console.log(pixelHandler.addressExist(JSON.parse(req.body.block.block)['link_as_account']))
   if (pixelHandler.addressExist(JSON.parse(req.body.block.block)['link_as_account'])) {
     log(`Found block ${req.body.block}`)
     return next()
@@ -17,7 +15,6 @@ const checkPixels = (req, res, next) => {
 const setAddress = (req, res, next) => {
   log(`set address ${req.body.block}`)
   if (req.body.block) {
-    //TODO: make sure link as account is receiver
     if (req.body.block.block) {
       const block = req.body.block
       req.block = {
@@ -34,9 +31,12 @@ const setAddress = (req, res, next) => {
 const validateBlock = async (req, res, next) => {
   log(`validate block ${req.block}`)
   const {hash} = req.block
+
   let raiClient = client({
     rai_node_host: process.env.RAI_NODE_HOST,
   })
+  //temp
+  return next()
 
   const confirm = await raiClient.block_confirm({
     hash,
@@ -44,13 +44,14 @@ const validateBlock = async (req, res, next) => {
   if (confirm.started === '1') {
     return next()
   }
+
   throw new Error('failed on block validate')
 }
 
 const updatePixels = (req, res, next) => {
   log(`update pixel ${req.block}`)
   pixelHandler.set(req.block.nanoWallAddress, req.block.senderAddress)
-  res.send('done')
+  res.end()
 }
 
 const log = str => {

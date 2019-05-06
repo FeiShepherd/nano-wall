@@ -19,12 +19,17 @@ describe('cache', () => {
       assert.equal(cache.get()['1'], 2)
     })
   })
-  describe('#addressExist', () => {
+  describe('#addressExist()', () => {
     it('should return false', () => {
       assert.equal(cache.addressExist('doesnt exist'), false)
     })
     it('should return true', () => {
       assert.equal(cache.addressExist(1), true)
+    })
+  })
+  describe('#backUp()', () => {
+    it('should write to file', () => {
+      
     })
   })
   it('should work with other require', () => {
