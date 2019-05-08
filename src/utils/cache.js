@@ -13,10 +13,7 @@ module.exports = (function() {
       return pixels
     },
     init: async () => {
-      const contents = await readFile(
-        path.join(__dirname, './addresses.json'),
-        'utf8'
-      )
+      const contents = await readFile(path.join(__dirname, './addresses.json'))
       pixels = JSON.parse(contents).addresses
       return pixels
     },
@@ -26,12 +23,13 @@ module.exports = (function() {
     addressExist: address => {
       return address in pixels
     },
-    backUp: async() => {
+    backUp: async () => {
       await writeFile(
         path.join(__dirname, './addresses.json'),
         JSON.stringify({
           addresses: pixels
-        })
+        }),
+        'utf8'
       )
     }
   }

@@ -28,13 +28,18 @@ describe('cache', () => {
     })
   })
   describe('#backUp()', () => {
-    it('should write to file', () => {
-      
+    it('should write to file', async () => {
+      cache.init()
+      cache.set(10, 20)
+      await cache.backUp()
+      cache.set(10, 0)
+      await cache.init()
+      assert.equal(cache.get()[10], 20)
     })
   })
   it('should work with other require', () => {
     const cache2 = require('../../src/utils/cache.js')
-    cache.set('1','2')
+    cache.set('1', '2')
     assert.equal(cache2.get()['1'], '2')
   })
 })
