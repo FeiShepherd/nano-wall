@@ -27,10 +27,10 @@ module.exports = (function() {
       await writeFile(
         path.join(__dirname, './addresses.json'),
         JSON.stringify({
-          addresses: pixels
+          addresses: pixels,
         }),
-        'utf8'
+        'utf8',
       )
-    }
+    },
   }
 })()

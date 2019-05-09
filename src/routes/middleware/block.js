@@ -35,8 +35,6 @@ const validateBlock = async (req, res, next) => {
   let raiClient = client({
     rai_node_host: process.env.RAI_NODE_HOST,
   })
-  //temp
-  return next()
 
   const confirm = await raiClient.block_confirm({
     hash,
@@ -51,6 +49,7 @@ const validateBlock = async (req, res, next) => {
 const updatePixels = (req, res, next) => {
   log(`update pixel ${req.block}`)
   pixelHandler.set(req.block.nanoWallAddress, req.block.senderAddress)
+  pixelHandler.backUp()
   res.end()
 }
 

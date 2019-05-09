@@ -28,8 +28,7 @@ describe('cache', () => {
     })
   })
   describe('#backUp()', () => {
-    it('should write to file', async () => {
-      cache.init()
+    it('should overwrite data with init using backup', async () => {
       cache.set(10, 20)
       await cache.backUp()
       cache.set(10, 0)

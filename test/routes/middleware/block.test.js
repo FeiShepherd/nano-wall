@@ -19,7 +19,8 @@ describe('Middleware block', () => {
     res = {
       json: sinon.stub(),
       status: sinon.stub(),
-      send: sinon.stub()
+      send: sinon.stub(),
+      end: sinon.stub()
     }
     res.status.returns(res)
     next = sinon.stub()
