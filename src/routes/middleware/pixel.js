@@ -1,9 +1,10 @@
 'use strict'
 
-//const cacheHandler = require('../utils/pixelHandler.js')
+let pixelHandler = require('../../utils/cache.js')
 
 const getPixel = (req, res, next) => {
-  res.status(200).json('pixel')
+  const pixels = pixelHandler.get()
+  res.status(200).json(pixels)
 }
 
 module.exports = {

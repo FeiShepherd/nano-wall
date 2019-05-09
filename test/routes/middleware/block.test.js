@@ -31,7 +31,8 @@ describe('Middleware block', () => {
     sampleBlock = require('./sample-block.js')
     pixelHandler = {
       addressExist: sinon.stub(),
-      set: sinon.stub()
+      set: sinon.stub(),
+      backUp: sinon.stub()
     }
     responses = {
       created: {
@@ -149,6 +150,7 @@ describe('Middleware block', () => {
           req.block.senderAddress
         )
       )
+      assert(pixelHandler.backUp.called)
     })
   })
 })
